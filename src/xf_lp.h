@@ -15,6 +15,7 @@
 /* ==================== [Includes] ========================================== */
 
 #include "xf_lp_config_internal.h"
+#include "xf_lp_sleep.h"
 
 #ifdef __cplusplus
 extern "C" {
