@@ -81,6 +81,13 @@ int xf_lp_get_lock_value(void);
  */
 xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority);
 
+/**
+ * @brief 启动低功耗
+ * 
+ * @param sleep_ms 休眠时间
+ */
+void xf_lp_enable(uint32_t sleep_ms);
+
 /* ==================== [Macros] ============================================ */
 
 #ifdef __cplusplus

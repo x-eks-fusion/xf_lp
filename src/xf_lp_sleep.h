@@ -29,6 +29,7 @@ typedef enum _xf_lp_sleep_source_t {
     XF_LP_SLEEP_WAKEUP_ALL,
     XF_LP_SLEEP_WAKEUP_TIMER,
     XF_LP_SLEEP_WAKEUP_GPIO,
+    XF_LP_SLEEP_WAKEUP_BLE,
 } xf_lp_sleep_source_t;
 
 /* ==================== [Global Prototypes] ================================= */
@@ -39,7 +40,9 @@ xf_err_t xf_lp_sleep_timer_wakeup(uint64_t us);
 
 xf_err_t xf_lp_sleep_gpio_wakeup(int pin, int level);
 
-xf_err_t xf_lp_sleep_start(void);
+xf_err_t xf_lp_light_sleep_start(void);
+
+xf_err_t xf_lp_deep_sleep_start(void);
 
 /* ==================== [Macros] ============================================ */
 

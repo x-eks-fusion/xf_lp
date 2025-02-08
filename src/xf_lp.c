@@ -87,7 +87,7 @@ void xf_lp_enable(uint32_t sleep_ms)
         return;
     }
 
-    for (int i = 0; i < XF_LP_PRIORITY_MAX; i++) {
+    for (int i = XF_LP_PRIORITY_MAX - 1; i >= 0; i--) {
         xf_lp_device_t *p = s_lp_device_list[i];
         while (p->next != NULL) {
             p->suspend();
@@ -97,16 +97,17 @@ void xf_lp_enable(uint32_t sleep_ms)
 
     xf_lp_sleep_timer_wakeup(sleep_ms * 1000);
     xf_sys_set_cpu_freq(s_lp_config.min_freq_mhz);
-    xf_lp_sleep_start();
+    xf_lp_light_sleep_start();
     xf_sys_set_cpu_freq(s_lp_config.max_freq_mhz);
 
-    for (int i = XF_LP_PRIORITY_MAX - 1; i >= 0; i--) {
+    for (int i = 0; i < XF_LP_PRIORITY_MAX; i++) {
         xf_lp_device_t *p = s_lp_device_list[i];
         while (p->next != NULL) {
             p->resume();
             p = p->next;
         }
     }
+
 }
 
 /* ==================== [Static Functions] ================================== */
