@@ -36,7 +36,7 @@ typedef enum _xf_lp_sleep_source_t {
 
 /* ==================== [Global Prototypes] ================================= */
 
-xf_err_t xf_lp_sleep_disable_wakeup_source(xf_lp_sleep_source_t source);
+xf_err_t xf_lp_sleep_enable_wakeup_source(xf_lp_sleep_source_t source);
 
 xf_err_t xf_lp_sleep_timer_wakeup(uint64_t us);
 

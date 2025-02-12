@@ -60,7 +60,7 @@ int xf_lp_get_lock_value(void)
     return s_lp_lock_value;
 }
 
-xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority)
+xf_err_t xf_lp_register_device(xf_lp_device_t *device, uint32_t priority)
 {
     if (device == NULL || priority >= XF_LP_PRIORITY_MAX) {
         return XF_ERR_INVALID_ARG;
@@ -80,8 +80,14 @@ xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority)
     return XF_OK;
 }
 
-void xf_lp_enable(uint32_t sleep_ms)
+void xf_lp_run(uint32_t sleep_ms)
 {
+    if (s_lp_config.is_auto_sleep == false)
+    {
+        return;
+    }
+
+
     if (s_lp_lock_value != 0) {
         XF_LOGD(TAG, "lock value is %d", s_lp_lock_value);
         return;
