@@ -40,6 +40,7 @@ xf_err_t xf_lp_configure(const xf_lp_config_t *config)
 
     s_lp_config = *config;
     s_lp_lock_value = 0;
+    xf_lp_sleep_enable_wakeup_source(XF_LP_SLEEP_WAKEUP_TIMER);
     return XF_OK;
 }
 
@@ -82,6 +83,10 @@ xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority)
 
 void xf_lp_enable(uint32_t sleep_ms)
 {
+    if (s_lp_config.is_auto_sleep == false) {
+        return;
+    }
+
     if (s_lp_lock_value != 0) {
         XF_LOGD(TAG, "lock value is %d", s_lp_lock_value);
         return;
@@ -89,12 +94,16 @@ void xf_lp_enable(uint32_t sleep_ms)
 
     for (int i = XF_LP_PRIORITY_MAX - 1; i >= 0; i--) {
         xf_lp_device_t *p = s_lp_device_list[i];
+        if (p == NULL) {
+            continue;
+        }
+
         while (p->next != NULL) {
             p->suspend();
             p = p->next;
         }
     }
-
+    
     xf_lp_sleep_timer_wakeup(sleep_ms * 1000);
     xf_sys_set_cpu_freq(s_lp_config.min_freq_mhz);
     xf_lp_light_sleep_start();
@@ -102,6 +111,9 @@ void xf_lp_enable(uint32_t sleep_ms)
 
     for (int i = 0; i < XF_LP_PRIORITY_MAX; i++) {
         xf_lp_device_t *p = s_lp_device_list[i];
+        if (p == NULL) {
+            continue;
+        }
         while (p->next != NULL) {
             p->resume();
             p = p->next;
