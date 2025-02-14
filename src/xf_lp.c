@@ -61,7 +61,7 @@ int xf_lp_get_lock_value(void)
     return s_lp_lock_value;
 }
 
-xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority)
+xf_err_t xf_lp_register_device(xf_lp_device_t *device, uint32_t priority)
 {
     if (device == NULL || priority >= XF_LP_PRIORITY_MAX) {
         return XF_ERR_INVALID_ARG;
@@ -81,7 +81,7 @@ xf_err_t xf_lp_register_device(const xf_lp_device_t *device, uint32_t priority)
     return XF_OK;
 }
 
-void xf_lp_enable(uint32_t sleep_ms)
+void xf_lp_run(uint32_t sleep_ms)
 {
     if (s_lp_config.is_auto_sleep == false) {
         return;
@@ -105,9 +105,17 @@ void xf_lp_enable(uint32_t sleep_ms)
     }
     
     xf_lp_sleep_timer_wakeup(sleep_ms * 1000);
+#if XF_LP_CPU_MODE == 1
+    xf_sys_cpu_stop();
+#elif XF_LP_CPU_MODE == 2
     xf_sys_set_cpu_freq(s_lp_config.min_freq_mhz);
+#endif
     xf_lp_light_sleep_start();
+#if XF_LP_CPU_MODE == 1
+    xf_sys_cpu_run(void);
+#elif XF_LP_CPU_MODE == 2
     xf_sys_set_cpu_freq(s_lp_config.max_freq_mhz);
+#endif
 
     for (int i = 0; i < XF_LP_PRIORITY_MAX; i++) {
         xf_lp_device_t *p = s_lp_device_list[i];

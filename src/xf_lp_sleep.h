@@ -26,15 +26,17 @@ extern "C" {
 
 typedef enum _xf_lp_sleep_source_t {
     XF_LP_SLEEP_WAKEUP_UNDEFINED = 0,
-    XF_LP_SLEEP_WAKEUP_ALL,
-    XF_LP_SLEEP_WAKEUP_TIMER,
-    XF_LP_SLEEP_WAKEUP_GPIO,
-    XF_LP_SLEEP_WAKEUP_BLE,
+
+    XF_LP_SLEEP_WAKEUP_TIMER = 1 << 0,
+    XF_LP_SLEEP_WAKEUP_GPIO = 1 << 1,
+    XF_LP_SLEEP_WAKEUP_BLE = 1 << 2,
+
+    XF_LP_SLEEP_WAKEUP_ALL = 0x7fffffff,
 } xf_lp_sleep_source_t;
 
 /* ==================== [Global Prototypes] ================================= */
 
-xf_err_t xf_lp_sleep_disable_wakeup_source(xf_lp_sleep_source_t source);
+xf_err_t xf_lp_sleep_enable_wakeup_source(xf_lp_sleep_source_t source);
 
 xf_err_t xf_lp_sleep_timer_wakeup(uint64_t us);
 
