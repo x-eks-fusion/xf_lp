@@ -23,6 +23,12 @@ extern "C" {
 
 /* ==================== [Defines] =========================================== */
 
+#if (!defined(XF_LP_ENABLE)) || (XF_LP_ENABLE) || defined(__DOXYGEN__)
+#   define XF_LP_IS_ENABLE      (1)
+#else
+#   define XF_LP_IS_ENABLE      (0)
+#endif
+
 // 设置低功耗外设件的最大优先级
 #ifndef XF_LP_PRIORITY_MAX
 #define XF_LP_PRIORITY_MAX 4

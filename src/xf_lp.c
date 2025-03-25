@@ -14,6 +14,8 @@
 #include "xf_lp.h"
 #include "xf_sys.h"
 
+#if XF_LP_IS_ENABLE
+
 /* ==================== [Defines] =========================================== */
 
 #define TAG "xf_lp"
@@ -97,13 +99,11 @@ void xf_lp_run(uint32_t sleep_ms)
         if (p == NULL) {
             continue;
         }
-
-        while (p->next != NULL) {
+        for (; p != NULL; p = p->next) {
             p->suspend();
-            p = p->next;
         }
     }
-    
+
     xf_lp_sleep_timer_wakeup(sleep_ms * 1000);
 #if XF_LP_CPU_MODE == 1
     xf_sys_cpu_stop();
@@ -122,12 +122,13 @@ void xf_lp_run(uint32_t sleep_ms)
         if (p == NULL) {
             continue;
         }
-        while (p->next != NULL) {
+        for (; p != NULL; p = p->next) {
             p->resume();
-            p = p->next;
         }
     }
 
 }
 
 /* ==================== [Static Functions] ================================== */
+
+#endif /* XF_LP_IS_ENABLE */
